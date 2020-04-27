@@ -27,7 +27,11 @@ namespace MSXML {
 		private:
 			using Base = std::vector<std::string>;
 		public:
-			string(const wstring& w) { for (const auto& i : w) Base::emplace_back(::string::converter::stl::to_bytes(i)); }
+			string() : Base() {}
+			string(const wstring& w) : Base() { 
+				if (w.empty()) return;
+				for (const auto& i : w) Base::emplace_back(::string::converter::stl::to_bytes(i));
+			}
 		};
 
 		template<typename T = int, std::enable_if_t<std::is_signed_v<T> && std::is_integral_v<T>, std::nullptr_t> = nullptr>
@@ -36,7 +40,10 @@ namespace MSXML {
 			using Base = std::vector<T>;
 		public:
 			signed_integer() : Base() {}
-			signed_integer(const wstring& w) { for (const auto& i : w) Base::emplace_back(static_cast<T>(std::stoll(i))); }
+			signed_integer(const wstring& w) : Base() {
+				if (w.empty()) return;
+				for (const auto& i : w) Base::emplace_back(static_cast<T>(std::stoll(i))); 
+			}
 		};
 
 		template<typename T = unsigned int, std::enable_if_t<std::is_unsigned_v<T>&& std::is_integral_v<T>, std::nullptr_t> = nullptr>
@@ -45,7 +52,10 @@ namespace MSXML {
 			using Base = std::vector<T>;
 		public:
 			unsigned_integer() : Base() {}
-			unsigned_integer(const wstring& w) { for (const auto& i : w) Base::emplace_back(static_cast<T>(std::stoull(i))); }
+			unsigned_integer(const wstring& w) {
+				if (w.empty()) return;
+				for (const auto& i : w) Base::emplace_back(static_cast<T>(std::stoull(i)));
+			}
 		};
 
 		template<typename T = double, std::enable_if_t<std::is_floating_point_v<T>, std::nullptr_t> = nullptr>
@@ -54,7 +64,10 @@ namespace MSXML {
 			using Base = std::vector<T>;
 		public:
 			floating_point() : Base() {}
-			floating_point(const wstring& w) { for (const auto& i : w) Base::emplace_back(static_cast<T>(std::stold(i))); }
+			floating_point(const wstring& w) { 
+				if (w.empty()) return;
+				for (const auto& i : w) Base::emplace_back(static_cast<T>(std::stold(i)));
+			}
 		};
 	}
 }
