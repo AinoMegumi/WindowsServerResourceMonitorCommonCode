@@ -9,7 +9,7 @@ namespace MSXML {
 		{
 			WIN32_FIND_DATAW FindData{};
 			if (
-				FileFindHandleManager hFind = FindFirstFileW(FilePath.c_str(), &FindData);
+				HANDLE hFind = FindFirstFileW(FilePath.c_str(), &FindData);
 				 [&hFind] (){
 					const bool Flag = (INVALID_HANDLE_VALUE == hFind);
 					CloseHandle(hFind);
