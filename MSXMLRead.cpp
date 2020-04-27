@@ -1,5 +1,4 @@
 ﻿#include "MSXMLRead.hpp"
-#include "HandleManager.h"
 #include "GetErrorMessage.h"
 #include <Windows.h>
 #include <comdef.h>
@@ -14,8 +13,14 @@ namespace MSXML {
 	Read::Read(const std::wstring& FilePath) : lpXmlDoc() {
 		{
 			WIN32_FIND_DATAW FindData{};
-			if (FileFindHandleManager hFind = FindFirstFileW(FilePath.c_str(), &FindData); INVALID_HANDLE_VALUE == hFind) 
-				throw std::runtime_error(GetErrorMessageA());
+			if (
+				FileFindHandleManager hFind = FindFirstFileW(FilePath.c_str(), &FindData);
+				 [&hFind] (){
+					const bool Flag = (INVALID_HANDLE_VALUE == hFind);
+					CloseHandle(hFind);
+					return Flag;
+				 }
+			()) throw std::runtime_error(GetErrorMessageA());
 			if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) throw std::runtime_error("Reserved path is directory");
 		}
 		VARIANT_BOOL Result{};
