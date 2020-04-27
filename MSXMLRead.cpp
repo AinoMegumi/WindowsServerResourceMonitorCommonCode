@@ -12,7 +12,7 @@ namespace MSXML {
 				HANDLE hFind = FindFirstFileW(FilePath.c_str(), &FindData);
 				 [&hFind] (){
 					const bool Flag = (INVALID_HANDLE_VALUE == hFind);
-					if (hFind != nullptr) CloseHandle(hFind);
+					if (hFind != nullptr) FindClose(hFind);
 					return Flag;
 				 }
 			()) throw std::runtime_error(GetErrorMessageA());
