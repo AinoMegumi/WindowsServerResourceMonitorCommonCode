@@ -1,7 +1,8 @@
 ﻿#include "XmlDomElement.hpp"
 #include "ComString.hpp"
-#include "../Common/GetErrorMessage.h"
+#include "GetErrorMessage.h"
 #include "SafeRelease.hpp"
+#include "XmlDomText.hpp"
 
 namespace MSXML {
 	XmlDomElement::XmlDomElement() : XmlDomElement(nullptr) {}
@@ -15,7 +16,7 @@ namespace MSXML {
 
 	XmlDomElement::XmlDomElement(const XmlDomDocument& lpXmlDoc, const std::wstring& key, const std::wstring& data) : XmlDomElement(lpXmlDoc, key) {
 		ComString str(data);
-		IXMLDOMText* txt = nullptr;
+		XmlDomText txt{};
 		if (const HRESULT hr = lpXmlDoc->createTextNode(str.get(), &txt); FAILED(hr)) throw std::runtime_error(GetErrorMessageA(hr));
 		this->element->appendChild(txt, NULL);
 		SafeRelease(txt);
