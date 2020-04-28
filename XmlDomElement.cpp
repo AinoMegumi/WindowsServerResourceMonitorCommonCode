@@ -19,7 +19,6 @@ namespace MSXML {
 		XmlDomText txt{};
 		if (const HRESULT hr = lpXmlDoc->createTextNode(str.get(), &txt); FAILED(hr)) throw std::runtime_error(GetErrorMessageA(hr));
 		this->element->appendChild(txt, NULL);
-		SafeRelease(txt);
 	}
 
 	XmlDomElement::~XmlDomElement() {
